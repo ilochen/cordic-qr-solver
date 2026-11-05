@@ -19,10 +19,13 @@ Compile the integrated source alone: the standalone variants define overlapping 
 
 ```sh
 make lint          # Verilator source elaboration
+make rtl-sim       # integrated RTL, 100 streamed systems, checked against a double-precision solve
 npm test           # Node.js 22+, no dependencies
 ```
 
-For MATLAB with Fixed-Point Designer, change to `model`, run `generate_patterns`, then `dsp_final`. The script exports binary fixed-point test vectors and evaluates the solver. The generated 100-system set is reproducible; use the report's original dataset for reproducing its exact error statistics.
+For MATLAB with Fixed-Point Designer, change to `model/` and run `dsp_final`. The supplied `qr_test_patterns.mat` is included. The script writes 25-bit fixed-point input words and evaluates the 18-stage solver. Run `generate_patterns` separately to regenerate seeded data. The alternative script under `model/archive/` selects 17 stages and loads `input_patterns_updated.mat`; run it from that directory to avoid overwriting the primary model outputs.
+
+The source testbench instantiates DATA_WIDTH=25. `make rtl-sim` streams the supplied `vectors/testcases.txt` and checks 100 solution vectors. The driver disables the original simulator-specific FSDB calls by default. `constraints/qr_solver.sdc` preserves the original 20 ns synthesis target and references external libraries by name. The 7.5 ns RTL stimulus clock is a simulation setting, not a measured implementation frequency.
 
 ## Design
 
