@@ -1,5 +1,7 @@
 # CORDIC QR Linear Solver
 
+[![Validation](https://github.com/ilochen/cordic-qr-solver/actions/workflows/check.yml/badge.svg)](https://github.com/ilochen/cordic-qr-solver/actions/workflows/check.yml)
+
 A fixed-point 4 × 4 solver integrating a CORDIC systolic QR array and folded back-substitution. The architecture reuses vectoring directions across columns, aligns operands with inter-PE registers, and overlaps coefficient loading with triangular solution through ping-pong register banks.
 
 [Interactive architecture and design decisions](https://ilochen.github.io/projects/cordic-qr-solver/)
@@ -32,3 +34,9 @@ The source testbench instantiates DATA_WIDTH=25. `make rtl-sim` streams the supp
 QR implements rotations through shift/add stages and output gain correction. Retiming preserves producer–consumer alignment through the array. Back-substitution shares three product lanes and one divider; bank selection separates the next coefficient block from the current solve.
 
 See [validation notes](docs/validation.md) for the checked artifacts and compiler diagnostics.
+
+## Validation snapshot
+
+100 integrated RTL solves; maximum solution RMSE 0.000535664 for the supplied quantized systems.
+
+Rechecked on 6 November 2026. Simulation results establish the covered functional behavior; physical implementation measurements are identified separately in the documentation.
